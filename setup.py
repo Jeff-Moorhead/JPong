@@ -13,5 +13,6 @@ setup(
         "gui_scripts": [
             "jpong=pong.pong:main"
             ]
-        }
+        },
+    install_requires=["pygame"],
 )
