@@ -1,8 +1,8 @@
-JeffPong
+JPong
 ========
 
 This is a simple implementation of the classic video game written in Python with the Pygame library.
-
+The J stands for Jeff.
 
 Installation
 ------------
@@ -15,7 +15,20 @@ Play
 
 To play, use the up and down array keys on your keyboard to control the paddle. To pause, press P.
 To continue playing, press S. To quit, press the escape key, or select the "X" in the top right
-of the game window.
+of the game window. When you lose, you can simply press R to start a new game.
+
+There are three game modes: easy, medium, hard, and impossible. The default is medium, but if you want to make
+the game easier or harder, simply pass the desired difficulty using the `--mode` option. For example
+
+```
+jpong --mode impossible
+```
+
+or
+
+```
+jpong -m impossible
+```
 
 Modifications and Bugs
 ----------------------

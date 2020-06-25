@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pygame
+import argparse
 
 pygame.init()
 
@@ -69,7 +70,7 @@ class Ball:
 
 class Paddle:
     width = 20
-    height = 150
+    height = 140
     x = WIDTH - width
     color = pygame.Color("gray")
 
@@ -113,12 +114,26 @@ def check_collisions(paddle, ball):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--mode", "-m", default="medium", choices=["easy", "medium", "hard", "impossible"])
+    args = parser.parse_args()
+
+    mode = args.mode
+
     screen = pygame.display.set_mode(DIMENSIONS)
     screen.fill(BG_COLOR)
     border = Border(screen, DIMENSIONS)
 
     ball_location = (WIDTH - 4*Ball.radius, HEIGHT // 2)
-    ball_velocity = (-10, -10)
+    if mode == "easy":
+        ball_velocity = (-10, -10)
+    elif mode == "medium":
+        ball_velocity = (-15, -15)
+    elif mode == "hard":
+        ball_velocity = (-20, -20)
+    elif mode == "impossible":
+        ball_velocity = (-25, -25)
+
     ball = Ball(screen, ball_location, ball_velocity)
 
     paddle_location = HEIGHT - Paddle.height
