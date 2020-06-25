@@ -1,9 +1,13 @@
 from setuptools import setup, find_packages
-from pong import __version__
+
+version = {}
+
+with open("./pong/version.py", "r") as fh:
+    exec(fh.read(), version)
 
 setup(
     name="JPong",
-    version=__version__,
+    version=version.get("__version__", "0.0.1"),
     description="A simple Pong game written with Pygame",
     long_description="A simple Pong game written with Pygame. The J stands for Jeff.",
     packages=find_packages(),
