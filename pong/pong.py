@@ -103,10 +103,14 @@ class OutOfBoundsError(Exception):
 
 
 def check_collisions(paddle, ball):
-    if ball.x + Ball.radius >= WIDTH - Paddle.width:
-        if paddle.y <= ball.y - Ball.radius <= paddle.y + Paddle.height:
+    if ball.x + Ball.radius > WIDTH - Paddle.width:
+        if paddle.y < ball.y - Ball.radius < paddle.y + Paddle.height:
             ball.reverse_x()
-        
+            return True
+        else:
+            return False
+    return False
+
 
 def main():
     screen = pygame.display.set_mode(DIMENSIONS)
@@ -123,11 +127,14 @@ def main():
 
     clock = pygame.time.Clock()
 
-    ACTIVE, PAUSE = 0, 1
+    ACTIVE, PAUSE, GAMEOVER = 0, 1, 2
     state = ACTIVE
 
+    score = 0
+
     pause_text = pygame.font.SysFont('Consolas', 23).render('Pause', True, pygame.Color("gray"))
-    lose_text = pygame.font.SysFont('Consolas', 48).render('You lost!', True, pygame.Color("gray"))
+    lose_text = pygame.font.SysFont('Consolas', 48).render('You lost! Press R to play again.', True, pygame.Color("gray"))
+
 
     # Create an event loop
     while True:
@@ -142,9 +149,17 @@ def main():
             paddle.move_up()
         elif keys[pygame.K_p]:
             state = PAUSE
+        elif keys[pygame.K_r]:
+            if state == GAMEOVER:
+                ball.x, ball.y = (WIDTH - 4*Ball.radius, HEIGHT // 2)
+                ball.reverse_x()
+                paddle.y = HEIGHT - Paddle.height
+                score = 0
+                state = ACTIVE
+            else:
+                continue
         elif keys[pygame.K_s]:
             state = ACTIVE
-            
 
         if e.type == pygame.QUIT:
             break
@@ -154,18 +169,23 @@ def main():
         if state == ACTIVE:
             screen.fill(BG_COLOR)
 
-            check_collisions(paddle, ball)
+            if check_collisions(paddle, ball):
+                score += 1
+
+            score_text = pygame.font.SysFont("Consolas", 48).render(str(score), True, pygame.Color("gray"))
+            screen.blit(score_text, (Border.thickness + 5, Border.thickness + 5))
 
             try:
                 ball.update()
             except OutOfBoundsError:
-                screen.blit(lose_text, (WIDTH // 2, HEIGHT // 2))
+                state = GAMEOVER
+                screen.blit(lose_text, ((WIDTH // 2) - (lose_text.get_rect().width // 2), (HEIGHT // 2) - (lose_text.get_rect().height // 2)))
 
             paddle.update()
             border.draw()  # Redraw border to erase ball hits
 
         elif state == PAUSE:
-            screen.blit(pause_text, (WIDTH // 2, HEIGHT // 2))
+            screen.blit(pause_text, ((WIDTH // 2) - (pause_text.get_rect().width // 2), (HEIGHT // 2) - (pause_text.get_rect().height // 2)))
 
         pygame.display.flip()
 
