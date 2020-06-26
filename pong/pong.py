@@ -137,7 +137,7 @@ def main():
     ball = Ball(screen, ball_location, ball_velocity)
 
     paddle_location = HEIGHT - Paddle.height
-    paddle_velocity = 10
+    paddle_velocity = 20
     paddle = Paddle(screen, paddle_location, paddle_velocity)
 
     clock = pygame.time.Clock()
