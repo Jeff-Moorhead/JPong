@@ -128,11 +128,11 @@ def main():
     if mode == "easy":
         ball_velocity = (-10, -10)
     elif mode == "medium":
-        ball_velocity = (-15, -15)
+        ball_velocity = (-18, -18)
     elif mode == "hard":
-        ball_velocity = (-20, -20)
-    elif mode == "impossible":
         ball_velocity = (-25, -25)
+    elif mode == "impossible":
+        ball_velocity = (-35, -35)
 
     ball = Ball(screen, ball_location, ball_velocity)
 
@@ -167,7 +167,8 @@ def main():
         elif keys[pygame.K_r]:
             if state == GAMEOVER:
                 ball.x, ball.y = (WIDTH - 4*Ball.radius, HEIGHT // 2)
-                ball.reverse_x()
+                if ball.vel_x > 0:
+                    ball.reverse_x()
                 paddle.y = HEIGHT - Paddle.height
                 score = 0
                 state = ACTIVE
